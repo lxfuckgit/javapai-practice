@@ -6,21 +6,25 @@ import java.util.concurrent.TimeoutException;
 
 import org.apache.commons.lang3.SerializationUtils;
 
+import com.rabbitmq.client.Channel;
+
 /**
  * 
  * 功能概要：消息生产者
  * 
  * @author linbingwen
- * @since  2016年1月11日
+ * @since 2016年1月11日
  */
-public class QueueProducer extends EndPoint{
-     
-    public QueueProducer(String queueName) throws IOException, TimeoutException{
-        super(queueName);
-    }
- 
-    public void sendMessageToQueue(Serializable object) throws IOException {
-        channel.basicPublish("",endPointName, null, SerializationUtils.serialize(object));
-    }  
-}
+public class QueueProducer {
 
+	public static void main(String[] argv) throws IOException, TimeoutException {
+		Channel channel = TestRabbitMQ.createChannel();
+		channel.exchangeDeclare("com.sjd.test-exchange-fanout", "fanout");
+
+		String message = "xxx";
+
+		channel.basicPublish("com.sjd.test-exchange-fanout", "", null, message.getBytes());
+		System.out.println(" [x] Sent :'" + message + "'");
+	}
+
+}

@@ -1,58 +1,40 @@
 package com.javapai.practice.rabbitmq;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.TimeoutException;
+import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.QueueingConsumer;
 
-import org.apache.commons.lang3.SerializationUtils;
+public class QueueConsumer {
+	public static void main(String[] argv) throws Exception {
+		Channel channel = TestRabbitMQ.createChannel();
+		channel.exchangeDeclare("com.sjd.test-exchange-fanout", "fanout");
 
-import com.rabbitmq.client.AMQP.BasicProperties;
-import com.rabbitmq.client.Consumer;
-import com.rabbitmq.client.Envelope;
-import com.rabbitmq.client.ShutdownSignalException;
- 
-/**
- * 
- * 功能概要：读取队列的程序端，实现了Runnable接口
- * 
- * @author linbingwen
- * @since  2016年1月11日
- */
-public class QueueConsumer extends EndPoint implements Runnable, Consumer{
-     
-    public QueueConsumer(String endPointName) throws IOException, TimeoutException{
-        super(endPointName);       
-    }
-     
-    public void run() {
-        try {
-        	System.out.println(">>>>>>MQ队列生产者已运行....");
-            //start consuming messages. Auto acknowledge messages.
-            String consumerTag = channel.basicConsume(endPointName, true,this);
-			System.out.println(">>>>>MQ队列生产者运行结果：" + consumerTag);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
- 
-    /**
-     * Called when consumer is registered.
-     */
-    public void handleConsumeOk(String consumerTag) {
-        System.out.println("Consumer "+consumerTag +" registered");    
-    }
- 
-    /**
-     * Called when new message is available.
-     */
-	public void handleDelivery(String consumerTag, Envelope env, BasicProperties props, byte[] body) throws IOException {
-		Map map = (HashMap) SerializationUtils.deserialize(body);
-		System.out.println("Message Number " + map.get("message number") + " received.");
+	    String queueName = channel.queueDeclare().getQueue();
+	    channel.queueBind(queueName, "com.sjd.test-exchange-fanout", "");
+	    
+	    System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
+
+	    QueueingConsumer consumer = new QueueingConsumer(channel);
+	    channel.basicConsume(queueName, true, consumer);
+
+	    while (true) {
+	      QueueingConsumer.Delivery delivery = consumer.nextDelivery();
+	      String message = new String(delivery.getBody());
+
+	      System.out.println(" [x] Received '" + message + "'");   
+	    }
 	}
- 
-    public void handleCancel(String consumerTag) {}
-    public void handleCancelOk(String consumerTag) {}
-    public void handleRecoverOk(String consumerTag) {}
-    public void handleShutdownSignal(String consumerTag, ShutdownSignalException arg1) {}
+
+
+	// public static void main(String[] args) {
+	//
+	//
+	// for (int i = 0; i < 10; i++) {
+	// HashMap<String, String> message = new HashMap<String, String>();
+	// message.put("mq-body", "我是(" + i + ")号消息报文体.");
+	// producer.publishMessageToQueue(message);//为什么发送的时候，不用指定exchange?
+	//// producer.sendMessageToQueue(default_exchange_name, message);
+	// System.out.println(">>>>>>>>>>>生产者已发送报文:消息报文体(" + i + ").");
+	// }
+	// }
+
 }
