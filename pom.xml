@@ -59,11 +59,16 @@
 <!-- 		    <version>${elasticsearch-version}</version> -->
 <!-- 		</dependency> -->
 
-		<!-- 消息队列 rabbitmq -->
+		<!-- spring-rabbitmq -->
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.springframework.amqp</groupId> -->
+<!-- 			<artifactId>spring-rabbit</artifactId> -->
+<!-- 			<version>1.6.3.RELEASE</version> -->
+<!-- 		</dependency> -->
 		<dependency>
-			<groupId>org.springframework.amqp</groupId>
-			<artifactId>spring-rabbit</artifactId>
-			<version>1.6.2.RELEASE</version>
+			<groupId>com.rabbitmq</groupId>
+			<artifactId>amqp-client</artifactId>
+			<version>3.6.3</version>
 		</dependency>
 		
 		
