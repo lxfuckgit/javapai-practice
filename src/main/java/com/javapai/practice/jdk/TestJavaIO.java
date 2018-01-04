@@ -1,4 +1,4 @@
-package com.javapai.practice.javaio;
+package com.javapai.practice.jdk;
 
 public class TestJavaIO {
 
