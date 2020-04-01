@@ -10,17 +10,14 @@ import org.junit.Test;
 
 public class TestExecutors {
 	/**
-	 * 1、固定线程池创建.<br>
-	 * 2、默认拒绝策略.<br>
+	 * 
 	 */
-	@Test
-	public void testFixedThreadPool() {
-//		ExecutorService pool1 = Executors.newFixedThreadPool(10);
-
+	public void testThreadPool() {
 		LinkedBlockingDeque<Runnable> deque = new LinkedBlockingDeque<>(3);
 		ThreadPoolExecutor pool = new ThreadPoolExecutor(3, 4, 0, TimeUnit.MILLISECONDS, deque);
-		
-		//当执行第8次循环时，线程数量=maximumPoolSize，线程池执行了默认拒绝策略AbortPolicy: 丢弃新任务，并抛出异常。所以设置线程数和队列容量的时候需根据实际需求指定。
+
+		// 当执行第8次循环时，线程数量=maximumPoolSize，线程池执行了默认拒绝策略AbortPolicy:
+		// 丢弃新任务，并抛出异常。所以设置线程数和队列容量的时候需根据实际需求指定。
 		for (int i = 0; i < 8; i++) {
 			System.out.println("PoolSize: " + pool.getLargestPoolSize());
 			System.out.println("dequeSize: " + deque.size());
@@ -35,6 +32,15 @@ public class TestExecutors {
 			});
 		}
 		pool.shutdown();
+	}
+
+	/**
+	 * 1、固定线程池创建.<br>
+	 * 2、默认拒绝策略.<br>
+	 */
+	@Test
+	public void testFixedThreadPool() {
+		ExecutorService pool = Executors.newFixedThreadPool(10);
 	}
 
 	@Test
