@@ -8,7 +8,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<springversion>4.2.3.RELEASE</springversion>
 		<lucence-version>5.5.0</lucence-version>
-		<elasticsearch-version>5.3.0</elasticsearch-version>
+		<elasticsearch-version>7.11.2</elasticsearch-version>
 	</properties>
 	
 <!-- 	<parent> -->
