@@ -76,7 +76,7 @@
 		<dependency>
 		    <groupId>org.springframework.data</groupId>
 		    <artifactId>spring-data-mongodb</artifactId>
-		    <version>1.8.0.RELEASE</version>
+		    <version>3.3.5</version>
 <!-- 		    <version>1.10.4.RELEASE</version> -->
 		</dependency>
 		<!-- 指定spring-data-mongodb的驱动包版本 -->
